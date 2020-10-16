@@ -1,15 +1,10 @@
-import 'dart:async';
-import 'dart:convert';
 import 'package:sip_ua/sip_ua.dart';
 
+import '../grammar.dart';
+import '../logger.dart';
+import '../socket.dart';
 import 'websocket_dart_impl.dart'
     if (dart.library.js) 'websocket_web_impl.dart';
-import 'dart:math';
-
-import '../grammar.dart';
-import '../socket.dart';
-import '../timers.dart';
-import '../logger.dart';
 
 class WebSocketInterface implements Socket {
   String _url;
@@ -180,5 +175,10 @@ class WebSocketInterface implements Socket {
 
   void _onError(e) {
     logger.error('WebSocket ${this._url} error: ${e}');
+  }
+
+  @override
+  String toString() {
+    return 'WebSocketInterface{_url: $_url, _sip_uri: $_sip_uri, _via_transport: $_via_transport, _websocket_protocol: $_websocket_protocol, _allowBadCertificate: $_allowBadCertificate, _closed: $_closed, _connected: $_connected, weight: $weight}';
   }
 }
