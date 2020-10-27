@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sip_ua/sip_ua.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'widgets/action_button.dart';
 
 class DialPadWidget extends StatefulWidget {
   final SIPUAHelper _helper;
-
   DialPadWidget(this._helper, {Key key}) : super(key: key);
-
   @override
   _MyDialPadWidget createState() => _MyDialPadWidget();
 }
@@ -16,7 +14,6 @@ class DialPadWidget extends StatefulWidget {
 class _MyDialPadWidget extends State<DialPadWidget>
     implements SipUaHelperListener {
   String _dest;
-
   SIPUAHelper get helper => widget._helper;
   TextEditingController _textController;
   SharedPreferences _preferences;
@@ -36,7 +33,7 @@ class _MyDialPadWidget extends State<DialPadWidget>
     _dest = _preferences.getString('dest') ?? 'sip:hello_jssip@tryit.jssip.net';
     _textController = TextEditingController(text: _dest);
     _textController.text = _dest;
-
+    
     this.setState(() {});
   }
 
@@ -184,96 +181,92 @@ class _MyDialPadWidget extends State<DialPadWidget>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Dart SIP UA Demo"),
-        actions: <Widget>[
-          PopupMenuButton<String>(
-              onSelected: (String value) {
-                switch (value) {
-                  case 'account':
-                    Navigator.pushNamed(context, '/register');
-                    break;
-                  case 'about':
-                    Navigator.pushNamed(context, '/about');
-                    break;
-                  default:
-                    break;
-                }
-              },
-              icon: Icon(Icons.menu),
-              itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
-                    PopupMenuItem(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                            child: Icon(
-                              Icons.account_circle,
+        appBar: AppBar(
+          title: Text("Dart SIP UA Demo"),
+          actions: <Widget>[
+            PopupMenuButton<String>(
+                onSelected: (String value) {
+                  switch (value) {
+                    case 'account':
+                      Navigator.pushNamed(context, '/register');
+                      break;
+                    case 'about':
+                      Navigator.pushNamed(context, '/about');
+                      break;
+                    default:
+                      break;
+                  }
+                },
+                icon: Icon(Icons.menu),
+                itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+                      PopupMenuItem(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: <Widget>[
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                              child: Icon(
+                                Icons.account_circle,
+                                color: Colors.black38,
+                              ),
+                            ),
+                            SizedBox(
+                              child: Text('Account'),
+                              width: 64,
+                            )
+                          ],
+                        ),
+                        value: 'account',
+                      ),
+                      PopupMenuItem(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: <Widget>[
+                            Icon(
+                              Icons.info,
                               color: Colors.black38,
                             ),
-                          ),
-                          SizedBox(
-                            child: Text('Account'),
-                            width: 64,
-                          )
-                        ],
-                      ),
-                      value: 'account',
-                    ),
-                    PopupMenuItem(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: <Widget>[
-                          Icon(
-                            Icons.info,
-                            color: Colors.black38,
-                          ),
-                          SizedBox(
-                            child: Text('About'),
-                            width: 64,
-                          )
-                        ],
-                      ),
-                      value: 'about',
-                    )
-                  ]),
-        ],
-      ),
-      body: Align(
-        alignment: Alignment(0, 0),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.all(6.0),
-                child: Center(
-                    child: Text(
-                      'Status: ${EnumHelper.getName(helper.registerState.state)}',
-                      style: TextStyle(fontSize: 14, color: Colors.black54),
-                    )),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(6.0),
-                child: Center(
-                    child: Text(
-                      'Received Message: ${receivedMsg}',
-                      style: TextStyle(fontSize: 14, color: Colors.black54),
-                    )),
-              ),
-              Container(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: _buildDialPad(),
-                  )),
-            ],
-          )
+                            SizedBox(
+                              child: Text('About'),
+                              width: 64,
+                            )
+                          ],
+                        ),
+                        value: 'about',
+                      )
+                    ]),
+          ],
         ),
-      ),
-    );
+        body: Align(
+            alignment: Alignment(0, 0),
+            child: SingleChildScrollView(
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.all(6.0),
+                      child: Center(
+                          child: Text(
+                            'Status: ${EnumHelper.getName(helper.registerState.state)}',
+                            style: TextStyle(fontSize: 14, color: Colors.black54),
+                          )),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(6.0),
+                      child: Center(
+                          child: Text(
+                            'Received Message: ${receivedMsg}',
+                            style: TextStyle(fontSize: 14, color: Colors.black54),
+                          )),
+                    ),
+                    Container(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: _buildDialPad(),
+                        )),
+                  ]))));
   }
 
   @override
@@ -293,7 +286,7 @@ class _MyDialPadWidget extends State<DialPadWidget>
 
   @override
   void onNewMessage(SIPMessageRequest msg) {
-    //Save the incoming message to DB
+     //Save the incoming message to DB
     String msgBody = msg.request.body as String;
     setState(() {
       receivedMsg = msgBody;
